@@ -2,6 +2,7 @@ import numpy as np
 import pyrealsense2 as rs
 import cv2
 import os
+import heapq
 
 def draw_rectangle(image, barcode):
     x, y, w, h = barcode.rect
@@ -191,25 +192,24 @@ try:
                     w, h = 224, 224 
                     x,y = box[:,0][:,0],box[:,0][:,1]
                     
-                    x1 ,y1= max(box[:,0][:,0]) -250, min(box[:,0][:,1])
-                    x2 ,y2= box[:,0][:,0][1], box[:,0][:,1][1]
-                    
-                    '''
+                    max_x = heapq.nlargest(2, x)
+                    print(max_x)
                     i = 0
                     for p in x:
-                        if x3 == p:
-                            y3 = y[i]
-                            x3 = x3+ 250
-                            break
+                        if p in max_x:
+                            x[i] = x[i] - 250
                         else:
-                            i += 1  
-                    '''
+                            x[i] = x[i] + 250
+                            
+                        i+=1
+                        
+        
                     x1, y1 = x[0],y[0]
                     x2,y2 = x[1], y[1]
                     x3 ,y3= x[2], y[2]
                     x4 ,y4= x[3], y[3]
                     
-                
+                                          
           
                     cv2.circle(color_image, (x1, y1), 7, (255, 0, 255), 5)  
                     cv2.circle(color_image, (x2, y2), 7, (255, 0, 255), 5)
